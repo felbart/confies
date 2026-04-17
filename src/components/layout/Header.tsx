@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useScrolled } from "@/hooks/useScrolled";
-import logoBCO from "@/assets/images/logo-bco.svg";
-import logo from "@/assets/images/logo-verde.svg";
+import logoBCO from "/images/logo-bco.svg";
+import logo from "/images/logo-verde.svg";
 import { Link } from "react-router";
 const navItems = [
   { label: "Institucional", href: "#institucional" },

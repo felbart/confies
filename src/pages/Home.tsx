@@ -1,6 +1,8 @@
 import Header from "@/components/layout/Header";
 import { Hero } from "@/components/sections/_home/Hero";
 import QuemSomos from "@/components/sections/_home/QuemSomos";
+import SectionNoticias from "@/components/sections/_home/SectionNoticias";
+
 
 export default function Home() {
   return (
@@ -9,10 +11,8 @@ export default function Home() {
       <Hero />
 
       <QuemSomos />
-
-      <section id="fundacoes" className="mx-auto container px-4 py-24 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-semibold">Fundações de Apoio</h2>
-      </section>
+      <SectionNoticias />
+      
 
       <section id="agenda" className="mx-auto container px-4 py-24 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-semibold">Agenda</h2>

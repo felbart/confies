@@ -35,7 +35,7 @@
 }
 
 .eyebrow {
-  @apply inline-block text-sm uppercase tracking-[0.32em] text-primary-500 sm:text-base;
+  @apply inline-flex text-sm uppercase tracking-[0.32em] text-primary-500 sm:text-base;
 }
 
 @layer base {

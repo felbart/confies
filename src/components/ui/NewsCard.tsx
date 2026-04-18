@@ -1,3 +1,6 @@
+import { motion } from "motion/react"
+import { fadeUpItem } from "@/lib/animation"
+
 type NewsCardProps = {
   title: string
   image: string
@@ -14,10 +17,14 @@ export function NewsCard({
   variant = "default",
 }: NewsCardProps) {
   return (
-    <article
+    <motion.article
+    variants={fadeUpItem}
+    initial="rest"
+    whileHover={"hover"}
+    animate="rest"
       className={`
         relative overflow-hidden rounded-2xl
-        ${variant === "featured" ? "h-[420px]" : "h-[260px]"}
+        ${variant === "featured" ? "h-105" : "h-65"}
         group
       `}
     >
@@ -29,7 +36,7 @@ export function NewsCard({
       />
 
       {/* overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
 
       {/* conteúdo */}
       <div className="absolute bottom-0 left-0 right-0 p-5">
@@ -50,6 +57,6 @@ export function NewsCard({
           {date}
         </div>
       </div>
-    </article>
+    </motion.article>
   )
 }

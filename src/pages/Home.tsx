@@ -1,6 +1,8 @@
 import Header from "@/components/layout/Header";
+import AssociadasLogos from "@/components/sections/_home/AssociadasLogos";
 import { Hero } from "@/components/sections/_home/Hero";
 import QuemSomos from "@/components/sections/_home/QuemSomos";
+import SectionAtuacao from "@/components/sections/_home/SectionAtuacao";
 import SectionNoticias from "@/components/sections/_home/SectionNoticias";
 
 
@@ -12,19 +14,8 @@ export default function Home() {
 
       <QuemSomos />
       <SectionNoticias />
-      
-
-      <section id="agenda" className="mx-auto container px-4 py-24 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-semibold">Agenda</h2>
-      </section>
-
-      <section id="noticias" className="mx-auto container px-4 py-24 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-semibold">Notícias</h2>
-      </section>
-
-      <section id="contato" className="mx-auto container px-4 py-24 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-semibold">Contato</h2>
-      </section>
+      <SectionAtuacao />
+      <AssociadasLogos />
     </main>
   );
 }

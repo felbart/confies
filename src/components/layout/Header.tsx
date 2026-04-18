@@ -5,11 +5,11 @@ import logoBCO from "/images/logo-bco.svg";
 import logo from "/images/logo-verde.svg";
 import { Link } from "react-router";
 const navItems = [
-  { label: "Institucional", href: "#institucional" },
-  { label: "Fundações de Apoio", href: "#fundacoes" },
-  { label: "Agenda", href: "#agenda" },
-  { label: "Notícias", href: "#noticias" },
-  { label: "Contato", href: "#contato" },
+  { label: "Institucional", href: "institucional" },
+  { label: "Fundações de Apoio", href: "fundacoes" },
+  { label: "Agenda", href: "agenda" },
+  { label: "Notícias", href: "noticias" },
+  { label: "Contato", href: "contato" },
 ];
 
 export default function Header() {

@@ -7,6 +7,7 @@ import Noticias from "@/pages/Noticias"
 import Agenda from "@/pages/Agenda"
 import Premio from "@/pages/Premio"
 import Contato from "@/pages/Contato"
+import Fundacoes from "@/pages/Fundacoes"
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: "institucional",
         element: <Institucional />,
+      },
+      {
+        path: "fundacoes",
+        element: <Fundacoes />,
       },
       {
         path: "noticias",

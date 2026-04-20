@@ -31,12 +31,12 @@ const AssociadasCard = ({
         <Icon className="h-6 w-6 text-primary-900 md:h-7 md:w-7" />
       </div>
 
-      <div className="flex flex-1 flex-col gap-4">
-        <h3 className="max-w-[14ch] text-2xl font-semibold leading-tight text-white">
+      <div className="flex flex-1 flex-col items-start mt-2 gap-4">
+        <h4 className="text-xl font-semibold leading-tight text-white">
           {title}
-        </h3>
+        </h4>
 
-        <p className="text-base leading-relaxed text-primary-100">
+        <p className="leading-tight text-primary-100">
           {description}
         </p>
       </div>

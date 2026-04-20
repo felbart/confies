@@ -1,3 +1,7 @@
+import FAQ from "@/components/sections/_fundacoes/FAQ"
+import SectionFundacoes from "@/components/sections/_fundacoes/SectionFundacoes"
+import AssociadasLogos from "@/components/sections/_home/AssociadasLogos"
+import SectionAtuacao from "@/components/sections/_home/SectionAtuacao"
 import HeroInterno from "@/components/sections/HeroInterno"
 
 const Fundacoes = () => {
@@ -9,6 +13,11 @@ const Fundacoes = () => {
         eyebrow="Sobre as fundações"
         backgroundImage="/images/hero-fundacoes.png"
         />
+        <FAQ />
+
+        <SectionFundacoes />
+        <SectionAtuacao />
+        <AssociadasLogos />
     </section>
   )
 }

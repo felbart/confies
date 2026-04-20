@@ -1,3 +1,11 @@
+import {
+  fadeUpContainer,
+  fadeUpItem,
+  imageReveal,
+  scaleXDivider,
+} from "@/lib/animation"
+import { motion } from "motion/react"
+
 type HeroInternoProps = {
   eyebrow?: string
   title: string
@@ -14,43 +22,66 @@ const HeroInterno = ({
   return (
     <section
       id="hero"
-      className="relative min-h-[60vh] flex items-end py-12 overflow-hidden"
+      className="relative min-h-[60vh] flex items-end py-12 overflow-hidden bg-primary-800"
     >
-      {/* background */}
       {backgroundImage ? (
-        <div className="absolute inset-0">
+        <motion.div
+          variants={imageReveal}
+          initial="hidden"
+          animate="visible"
+          className="absolute inset-0"
+        >
           <img
             src={backgroundImage}
             alt=""
             className="h-full w-full object-cover"
           />
-        </div>
+        </motion.div>
       ) : (
         <div className="absolute inset-0 bg-linear-to-r from-primary-900 to-primary-800" />
       )}
 
-      {/* overlay */}
-      <div className="absolute inset-0 bg-linear-to-r from-primary-900/90 via-primary-900/70 to-primary-900/40" />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="absolute inset-0 bg-linear-to-r from-primary-900/90 via-primary-900/70 to-primary-900/40"
+      />
 
-      {/* conteúdo */}
       <div className="container relative">
-        <div className="w-full md:w-7/12 text-white space-y-3">
+        <motion.div
+          variants={fadeUpContainer}
+          initial="hidden"
+          animate="visible"
+          className="w-full md:w-7/12 text-white space-y-3"
+        >
           {eyebrow && (
-            <span className="eyebrow">
+            <motion.span variants={fadeUpItem} className="eyebrow">
               {eyebrow}
-            </span>
+            </motion.span>
           )}
 
-          <h1 className="text-3xl md:text-4xl font-semibold leading-tight">
+          <motion.h1
+            variants={fadeUpItem}
+            className="text-3xl md:text-4xl font-semibold leading-tight"
+          >
             {title}
-          </h1>
+          </motion.h1>
 
           {description && (
-            <p className="text-base md:text-lg text-primary-300">
+            <motion.p
+              variants={fadeUpItem}
+              className="text-base md:text-lg text-primary-300"
+            >
               {description}
-            </p>
+            </motion.p>
           )}
-        </div>
+
+          <motion.div
+            variants={scaleXDivider}
+            className="h-px w-24 origin-left bg-white/30"
+          />
+        </motion.div>
       </div>
     </section>
   )

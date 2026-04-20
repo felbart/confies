@@ -52,9 +52,9 @@ const SectionAtuacao = () => {
             Nossa Atuação
           </span>
 
-          <h2 className="mb-4 max-w-4xl text-white">
+          <h3 className="mb-4 max-w-4xl text-white">
             O que fazemos pelas nossas associadas
-          </h2>
+          </h3>
 
           <p className="max-w-3xl text-base leading-relaxed text-primary-200 md:text-lg">
             Promovemos integração, defesa e apoio às Fundações de Apoio em todo o Brasil.

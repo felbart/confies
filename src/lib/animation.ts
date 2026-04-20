@@ -11,7 +11,7 @@ export const fadeUpContainer: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      duration: 0.6,
+      duration: 1,
       ease: easeOutExpo,
       staggerChildren: 0.08,
       delayChildren: 0.08,
@@ -25,7 +25,7 @@ export const fadeUpItem: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.85,
+      duration: 1,
       ease: easeOutExpo,
     },
   },
@@ -70,9 +70,9 @@ export const fadeRight: Variants = {
 export const imageReveal: Variants = {
   hidden: {
     opacity: 0,
-    scale: 1.06,
-    filter: "blur(6px)",
-    clipPath: "inset(12% 0% 88% 0%)",
+    scale: 1.04,
+    filter: "blur(4px)",
+    clipPath: "inset(8% 0% 8% 0%)",
   },
   visible: {
     opacity: 1,
@@ -122,7 +122,7 @@ export const headerReveal: Variants = {
     y: 0,
     opacity: 1,
     transition: {
-      duration: 0.8,
+      duration: 1,
       ease: easeOutExpo,
     },
   },

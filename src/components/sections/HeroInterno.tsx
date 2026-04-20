@@ -6,23 +6,33 @@ import {
 } from "@/lib/animation"
 import { motion } from "motion/react"
 
+type HeroInternoSize = "sm" | "md" | "lg" 
+
 type HeroInternoProps = {
   eyebrow?: string
   title: string
   description?: string
   backgroundImage?: string
+  size?:HeroInternoSize
 }
+
+const sizeVariants = {
+  sm: "min-h-[30vh]",
+  md: "min-h-[45vh]",
+  lg: "min-h-[60vh]",
+} satisfies Record<HeroInternoSize, string>
 
 const HeroInterno = ({
   eyebrow,
   title,
   description,
   backgroundImage,
+  size = "lg"
 }: HeroInternoProps) => {
   return (
     <section
       id="hero"
-      className="relative min-h-[60vh] flex items-end py-12 overflow-hidden bg-primary-800"
+      className={`relative flex items-end py-12 overflow-hidden bg-primary-800 ${sizeVariants[size]}`}
     >
       {backgroundImage ? (
         <motion.div

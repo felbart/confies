@@ -2,6 +2,7 @@ import { fadeLeft, fadeRight, fadeUpContainer, fadeUpItem } from "@/lib/animatio
 import { motion } from "motion/react"
 
 type AnimatedTitleProps = {
+  eyebrow?: string
   title: string
   description?: string
   align?: "left" | "center" | "right"
@@ -26,6 +27,7 @@ const alignmentMap = {
 }
 
 const AnimatedTitle = ({
+  eyebrow,
   title,
   description,
   align = "center",
@@ -38,8 +40,19 @@ const AnimatedTitle = ({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
-      className={`flex flex-col gap-4 max-w-3xl ${config.container}`}
+      className={`flex flex-col gap-3 max-w-3xl ${config.container}`}
     >
+      {/* Eyebrow */}
+      {eyebrow && (
+        <motion.span
+          variants={fadeUpItem}
+          className={`text-xs uppercase tracking-[0.3em] text-primary-600 font-medium ${config.text}`}
+        >
+          {eyebrow}
+        </motion.span>
+      )}
+
+      {/* Title + Icon */}
       <motion.div
         variants={fadeUpContainer}
         className={`flex items-center gap-2 ${config.inner}`}
@@ -56,6 +69,7 @@ const AnimatedTitle = ({
         </motion.h4>
       </motion.div>
 
+      {/* Description */}
       {description && (
         <motion.p
           variants={fadeUpItem}

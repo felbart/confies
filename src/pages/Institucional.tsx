@@ -2,6 +2,7 @@ import SectionAtuacao from "@/components/sections/_home/SectionAtuacao"
 import SectionDocumentos from "@/components/sections/_institucional/SectionDocumentos"
 import SectionInstitucional from "@/components/sections/_institucional/SectionInstitucional"
 import SectionProcesso from "@/components/sections/_institucional/SectionProcesso"
+import CTA from "@/components/sections/CTA"
 import HeroInterno from "@/components/sections/HeroInterno"
 
 const Institucional = () => {
@@ -17,6 +18,7 @@ const Institucional = () => {
      <SectionAtuacao />
      <SectionProcesso />
      <SectionDocumentos />
+     <CTA />
     </section>
   )
 }

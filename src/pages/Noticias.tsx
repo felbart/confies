@@ -1,10 +1,40 @@
-import HeroInterno from "@/components/sections/HeroInterno"
-import { noticias } from "@/data/noticias"
 import { Calendar, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react"
 import { Link } from "react-router"
+import { useEffect, useState } from "react"
+import HeroInterno from "@/components/sections/HeroInterno"
+import { getNoticias, getUltimasNoticias } from "@/services/NewsServices"
+
+type Noticia = {
+  slug: string
+  title: string
+  excerpt: string
+  date: string
+  category: string
+  image: string
+}
 
 const Noticias = () => {
-  const ultimasNoticias = noticias.slice(0, 4)
+  const [noticias, setNoticias] = useState<Noticia[]>([])
+  const [ultimasNoticias, setUltimasNoticias] = useState<Noticia[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    async function carregarNoticias() {
+      try {
+        const noticiasData = await getNoticias()
+        const ultimasNoticiasData = await getUltimasNoticias(4)
+
+        setNoticias(noticiasData)
+        setUltimasNoticias(ultimasNoticiasData)
+      } catch (error) {
+        console.error("Erro ao carregar notícias:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    carregarNoticias()
+  }, [])
 
   return (
     <>
@@ -18,56 +48,62 @@ const Noticias = () => {
       <section id="noticias" className="section bg-white">
         <div className="container flex flex-col lg:flex-row items-start justify-between gap-10 xl:gap-14">
           <div className="main flex flex-col items-start justify-center gap-10 w-full lg:w-[calc(100%-320px)]">
-            <div className="flex flex-col gap-10 w-full">
-              {noticias.map((noticia) => (
-                <article
-                  key={noticia.slug}
-                  className="flex flex-col items-start gap-5 pb-10 border-b border-gray-200"
-                >
-                  <Link
-                    to={`/noticias/${noticia.slug}`}
-                    className="group w-full flex flex-col gap-5"
+            {isLoading ? (
+              <div className="w-full py-20 text-center">
+                <p className="text-gray-500">Carregando notícias...</p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-10 w-full">
+                {noticias.map((noticia) => (
+                  <article
+                    key={noticia.slug}
+                    className="flex flex-col items-start gap-5 pb-10 border-b border-gray-200"
                   >
-                    <div className="w-full h-[240px] md:h-[420px] rounded-3xl overflow-hidden">
-                      <img
-                        src={noticia.image}
-                        alt={noticia.title}
-                        className="size-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-                      />
-                    </div>
+                    <Link
+                      to={`/noticias/${noticia.slug}`}
+                      className="group w-full flex flex-col gap-5"
+                    >
+                      <div className="w-full h-[240px] md:h-[420px] rounded-3xl overflow-hidden">
+                        <img
+                          src={noticia.image}
+                          alt={noticia.title}
+                          className="size-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                        />
+                      </div>
 
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-secondary-100 text-secondary-800">
-                        {noticia.category}
-                      </span>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-secondary-100 text-secondary-800">
+                          {noticia.category}
+                        </span>
 
-                      <span className="text-sm text-gray-500 inline-flex items-center gap-1.5">
-                        <Calendar size={16} className="text-primary-800" />
-                        {noticia.date}
-                      </span>
-                    </div>
+                        <span className="text-sm text-gray-500 inline-flex items-center gap-1.5">
+                          <Calendar size={16} className="text-primary-800" />
+                          {noticia.date}
+                        </span>
+                      </div>
 
-                    <div className="flex flex-col gap-3">
-                      <h3 className="text-xl md:text-2xl font-semibold leading-tight text-gray-900 transition-colors duration-300 group-hover:text-primary-700">
-                        {noticia.title}
-                      </h3>
+                      <div className="flex flex-col gap-3">
+                        <h3 className="text-xl md:text-2xl font-semibold leading-tight text-gray-900 transition-colors duration-300 group-hover:text-primary-700">
+                          {noticia.title}
+                        </h3>
 
-                      <p className="text-sm md:text-base text-gray-600 text-pretty max-w-4xl">
-                        {noticia.excerpt}
-                      </p>
-                    </div>
-                  </Link>
+                        <p className="text-sm md:text-base text-gray-600 text-pretty max-w-4xl">
+                          {noticia.excerpt}
+                        </p>
+                      </div>
+                    </Link>
 
-                  <Link
-                    to={`/noticias/${noticia.slug}`}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-primary-800 transition-colors duration-300 hover:text-primary-700"
-                  >
-                    Leia mais
-                    <ArrowRight size={16} />
-                  </Link>
-                </article>
-              ))}
-            </div>
+                    <Link
+                      to={`/noticias/${noticia.slug}`}
+                      className="inline-flex items-center gap-2 text-sm font-medium text-primary-800 transition-colors duration-300 hover:text-primary-700"
+                    >
+                      Leia mais
+                      <ArrowRight size={16} />
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            )}
 
             <div className="w-full flex items-center justify-center pt-2">
               <nav

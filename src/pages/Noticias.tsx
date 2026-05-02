@@ -63,7 +63,7 @@ const Noticias = () => {
                       to={`/noticias/${noticia.slug}`}
                       className="group w-full flex flex-col gap-5"
                     >
-                      <div className="w-full h-[240px] md:h-[420px] rounded-3xl overflow-hidden">
+                      <div className="w-full h-60 md:h-105 rounded-3xl overflow-hidden">
                         <img
                           src={noticia.image}
                           alt={noticia.title}
@@ -135,7 +135,7 @@ const Noticias = () => {
             </div>
           </div>
 
-          <aside className="hidden lg:flex flex-col items-start justify-start gap-5 w-[260px] xl:w-[280px] shrink-0 sticky top-28">
+          <aside className="hidden lg:flex flex-col items-start justify-start gap-5 w-65 xl:w-70s shrink-0 sticky top-28">
             <div className="w-full rounded-3xl border border-gray-200 p-5 bg-gray-50">
               <div className="flex flex-col gap-5">
                 <div className="flex flex-col gap-1">

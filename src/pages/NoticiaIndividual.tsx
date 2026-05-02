@@ -44,14 +44,10 @@ const NoticiaIndividual = () => {
 
   return (
     <>
-      <HeroInterno
-        eyebrow="Notícia"
-        title="Acompanhe as principais ações e iniciativas do CONFIES"
-        size="sm"
-      />
+      <section id="hero" className="bg-primary-800 py-12"></section>
 
-      <section className="section bg-white">
-        <div className="container flex flex-col lg:flex-row items-start justify-between gap-10 xl:gap-14">
+      <section className="pb-12 md:pb-32 pt-4 md:pt-8 bg-white">
+        <div className="container flex flex-col lg:flex-row items-start justify-between gap-10 xl:gap-12">
           <main className="w-full lg:flex-1 max-w-none">
             <article className="flex flex-col gap-6">
               <div className="flex flex-col gap-5">
@@ -83,7 +79,7 @@ const NoticiaIndividual = () => {
                 <img
                   src={noticia.image}
                   alt={noticia.title}
-                  className="w-full h-[260px] md:h-[420px] lg:h-[520px] object-cover"
+                  className="w-full h-65 md:h-105 lg:h-130 object-cover"
                 />
               </div>
 
@@ -118,7 +114,7 @@ const NoticiaIndividual = () => {
             </article>
           </main>
 
-          <aside className="hidden lg:flex w-[260px] xl:w-[280px] shrink-0 sticky top-28">
+          <aside className="hidden lg:flex w-65 xl:w-70 shrink-0 sticky top-28">
             <div className="w-full flex flex-col gap-5">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-sm bg-secondary-400" />

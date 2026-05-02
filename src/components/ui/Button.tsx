@@ -1,6 +1,6 @@
 type ButtonProps = {
   children: React.ReactNode
-  variant?: "primary" | "secondary" | "ghost"
+  variant?: "primary" | "secondary" | "ghost" | "outline"
   size?: "sm" | "md" | "lg"
   fullWidth?: boolean
   className?: string
@@ -23,7 +23,9 @@ export function Button({
     secondary:
       "bg-secondary-400 text-gray-900 hover:bg-secondary-300",
     ghost:
-      "bg-transparent text-primary-700 hover:underline focus:ring-transparent px-0"
+      "bg-transparent text-primary-700 hover:underline focus:ring-transparent px-0",
+    outline:
+      "bg-transparent text-primary-200 hover:bg-primary-200 hover:text-primary-800 focus:ring-primary-200 border boder-primary-500",
   }
 
   const sizes = {

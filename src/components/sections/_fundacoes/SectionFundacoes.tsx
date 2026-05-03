@@ -1,270 +1,313 @@
 import { useMemo, useState } from "react"
 import {
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
+  Building2,
+  LayoutGrid,
+  List,
   MapPin,
+  Search,
   UsersRound,
 } from "lucide-react"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation } from "swiper/modules"
 
-import "swiper/css"
-import "swiper/css/navigation"
-
-import { Button } from "@/components/ui/Button"
 import { fundacoes } from "@/data/fundacoes"
-import type { Regiao, RegiaoId } from "@/types/fundacoes"
+import type { RegiaoId } from "@/types/fundacoes"
 
-const regioes: Regiao[] = [
-  {
-    id: "brasil",
-    label: "Brasil",
-    mapa: "/images/mapa/mapa-brasil.svg",
-  },
-  {
-    id: "norte",
-    label: "Norte",
-    mapa: "/images/mapa/mapa-norte.svg",
-  },
-  {
-    id: "nordeste",
-    label: "Nordeste",
-    mapa: "/images/mapa/mapa-nordeste.svg",
-  },
-  {
-    id: "centro-oeste",
-    label: "Centro-Oeste",
-    mapa: "/images/mapa/mapa-centro-oeste.svg",
-  },
-  {
-    id: "sudeste",
-    label: "Sudeste",
-    mapa: "/images/mapa/mapa-sudeste.svg",
-  },
-  {
-    id: "sul",
-    label: "Sul",
-    mapa: "/images/mapa/mapa-sul.svg",
-  },
-]
+type ViewMode = "lista" | "grid"
 
-const ITEMS_PER_SLIDE = 10
-
-function chunkArray<T>(array: T[], size: number): T[][] {
-  return Array.from({ length: Math.ceil(array.length / size) }, (_, index) =>
-    array.slice(index * size, index * size + size)
-  )
+type RegiaoOption = {
+  id: RegiaoId
+  label: string
 }
 
-const SectionFundacoes = () => {
+const regioes: RegiaoOption[] = [
+  { id: "brasil", label: "Brasil" },
+  { id: "norte", label: "Norte" },
+  { id: "nordeste", label: "Nordeste" },
+  { id: "centro-oeste", label: "Centro-Oeste" },
+  { id: "sudeste", label: "Sudeste" },
+  { id: "sul", label: "Sul" },
+]
+
+const labelRegiao: Record<Exclude<RegiaoId, "brasil">, string> = {
+  norte: "Norte",
+  nordeste: "Nordeste",
+  "centro-oeste": "Centro-Oeste",
+  sudeste: "Sudeste",
+  sul: "Sul",
+}
+
+function normalizarTexto(texto: string) {
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+}
+
+const SectionTodasFundacoes = () => {
   const [regiaoAtiva, setRegiaoAtiva] = useState<RegiaoId>("brasil")
+  const [viewMode, setViewMode] = useState<ViewMode>("lista")
+  const [busca, setBusca] = useState("")
 
-  const regiao = regioes.find((item) => item.id === regiaoAtiva) ?? regioes[0]
+  const fundacoesFiltradas = useMemo(() => {
+    const termo = normalizarTexto(busca.trim())
 
-  const fundacoesDaRegiao = useMemo(() => {
-    if (regiaoAtiva === "brasil") return fundacoes
+    return fundacoes.filter((fundacao) => {
+      const pertenceRegiao =
+        regiaoAtiva === "brasil" || fundacao.regiao === regiaoAtiva
 
-    return fundacoes.filter((fundacao) => fundacao.regiao === regiaoAtiva)
-  }, [regiaoAtiva])
+      const textoPesquisavel = normalizarTexto(
+        `${fundacao.nome} ${fundacao.sigla ?? ""} ${fundacao.cidade} ${
+          fundacao.uf
+        } ${labelRegiao[fundacao.regiao]}`
+      )
 
-  const slidesFundacoes = useMemo(() => {
-    return chunkArray(fundacoesDaRegiao, ITEMS_PER_SLIDE)
-  }, [fundacoesDaRegiao])
+      const correspondeBusca = termo === "" || textoPesquisavel.includes(termo)
 
-  const hasMultipleSlides = slidesFundacoes.length > 1
+      return pertenceRegiao && correspondeBusca
+    })
+  }, [regiaoAtiva, busca])
+
+  const regiaoAtualLabel =
+    regioes.find((regiao) => regiao.id === regiaoAtiva)?.label ?? "Brasil"
 
   return (
-    <section id="fundacoes" className="section bg-primary-900 text-white">
-      <div className="container flex flex-col gap-14">
+    <section id="fundacoes-associadas" className="section bg-gray-100 text-gray-900">
+      <div className="container flex flex-col gap-10">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-4 text-center">
-          <span className="eyebrow inline-flex items-center gap-2 text-secondary-300">
+          <span className="eyebrow inline-flex items-center gap-2 text-primary-700">
             <UsersRound className="size-4 text-primary-500" />
-            Nossa atuação
+            Fundações associadas
           </span>
 
-          <h3>Fundações associadas em todo o Brasil</h3>
+          <h3 className="text-gray-950">
+            Conheça as fundações que integram a rede CONFIES
+          </h3>
 
-          <p className="text-base text-primary-100 md:text-lg">
-            O CONFIES reúne fundações de apoio distribuídas em todas as regiões
-            do país, fortalecendo uma rede nacional que impulsiona a ciência, a
-            pesquisa e a inovação.
+          <p className="text-base text-gray-600 md:text-lg">
+            Consulte as fundações associadas por região, cidade e estado. A lista
+            reúne as instituições que fortalecem a ciência, a pesquisa e a inovação
+            em todo o Brasil.
           </p>
         </div>
 
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-5 rounded-3xl border border-gray-200 bg-white p-4 shadow-sm md:p-6">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            {regioes.map((item) => {
-              const isActive = item.id === regiaoAtiva
+            {regioes.map((regiao) => {
+              const isActive = regiaoAtiva === regiao.id
 
               return (
                 <button
-                  key={item.id}
+                  key={regiao.id}
                   type="button"
-                  onClick={() => setRegiaoAtiva(item.id)}
+                  onClick={() => setRegiaoAtiva(regiao.id)}
                   className={`
-                    group flex items-center justify-center gap-2 rounded-xl border px-3 py-3
-                    text-center transition-all
+                    flex items-center justify-center gap-2 rounded-xl border px-3 py-3
+                    text-sm font-semibold transition md:text-base
                     ${
                       isActive
-                        ? "border-primary-500 bg-primary-700 text-white shadow-xl shadow-primary-950/20"
-                        : "border-primary-500/40 bg-primary-800/40 text-primary-100 hover:bg-primary-800"
+                        ? "border-primary-600 bg-primary-700 text-white shadow-sm"
+                        : "border-gray-200 bg-gray-50 text-gray-700 hover:border-primary-300 hover:bg-white hover:text-primary-800"
                     }
                   `}
                 >
-                  <span
+                  <MapPin
                     className={`
-                      flex size-9 shrink-0 items-center justify-center rounded-xl transition
-                      ${
-                        isActive
-                          ? "bg-secondary-300 text-primary-900"
-                          : "border border-primary-500 text-primary-400"
-                      }
+                      size-4
+                      ${isActive ? "text-secondary-300" : "text-primary-600"}
                     `}
-                  >
-                    <MapPin className="size-4" />
-                  </span>
-
-                  <span className="text-sm font-semibold leading-tight md:text-base">
-                    {item.label}
-                  </span>
+                  />
+                  {regiao.label}
                 </button>
               )
             })}
           </div>
 
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-stretch">
-            <div className="lg:col-span-5">
-              <div className="relative flex h-full min-h-80 items-center justify-center overflow-hidden rounded-3xl bg-primary-800/60 p-8 lg:min-h-[520px]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[length:28px_28px] opacity-40" />
+          <div className="flex flex-col gap-4 border-t border-gray-200 pt-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="relative w-full lg:max-w-md">
+              <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
 
-                <div className="absolute inset-x-8 top-8 h-24 rounded-full bg-primary-500/20 blur-3xl" />
-
-                <img
-                  src={regiao.mapa}
-                  alt={`Mapa - ${regiao.label}`}
-                  className="relative z-10 max-h-[430px] w-full object-contain drop-shadow-2xl"
-                />
-              </div>
+              <input
+                type="search"
+                value={busca}
+                onChange={(event) => setBusca(event.target.value)}
+                placeholder="Buscar por fundação, cidade ou UF"
+                className="
+                  h-12 w-full rounded-xl border border-gray-200
+                  bg-gray-50 pl-11 pr-4 text-sm text-gray-900 outline-none
+                  placeholder:text-gray-400
+                  focus:border-primary-500 focus:bg-white
+                "
+              />
             </div>
 
-            <div className="lg:col-span-7">
-              <div className="flex h-full flex-col gap-6 rounded-3xl bg-primary-800/40 p-5 md:p-8">
-                <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                  <div>
-                    <span className="eyebrow text-secondary-300">
-                      {regiaoAtiva === "brasil"
-                        ? "Rede nacional"
-                        : `Região ${regiao.label}`}
-                    </span>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between lg:justify-end">
+              <span className="text-sm text-gray-600">
+                {fundacoesFiltradas.length} fundações encontradas
+              </span>
 
-                    <h4 className="mt-2 text-2xl font-semibold text-white md:text-3xl">
-                      Fundações associadas
-                    </h4>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-primary-100">
-                      {fundacoesDaRegiao.length} encontradas
-                    </span>
-
-                    {hasMultipleSlides && (
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          aria-label="Ver fundações anteriores"
-                          className="
-                            fundacoes-prev flex size-9 items-center justify-center rounded-full
-                            bg-secondary-300 text-primary-900 transition hover:bg-secondary-200
-                          "
-                        >
-                          <ChevronLeft className="size-4" />
-                        </button>
-
-                        <button
-                          type="button"
-                          aria-label="Ver próximas fundações"
-                          className="
-                            fundacoes-next flex size-9 items-center justify-center rounded-full
-                            bg-secondary-300 text-primary-900 transition hover:bg-secondary-200
-                          "
-                        >
-                          <ChevronRight className="size-4" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <Swiper
-                  key={regiaoAtiva}
-                  modules={[Navigation]}
-                  navigation={{
-                    prevEl: ".fundacoes-prev",
-                    nextEl: ".fundacoes-next",
-                  }}
-                  slidesPerView={1}
-                  spaceBetween={16}
-                  className="w-full"
+              <div className="flex rounded-xl border border-gray-200 bg-gray-50 p-1">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("lista")}
+                  className={`
+                    inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition
+                    ${
+                      viewMode === "lista"
+                        ? "bg-primary-700 text-white"
+                        : "text-gray-600 hover:bg-white hover:text-primary-800"
+                    }
+                  `}
                 >
-                  {slidesFundacoes.map((grupo, slideIndex) => (
-                    <SwiperSlide key={`${regiaoAtiva}-${slideIndex}`}>
-                      <ul className="grid grid-cols-1 overflow-hidden rounded-2xl border border-primary-500/30 bg-primary-900/30 md:grid-cols-2">
-                        {grupo.map((fundacao) => (
-                          <li
-                            key={fundacao.id}
-                            className="
-                              flex items-start gap-3 border-b border-primary-500/20 px-4 py-3
-                              transition hover:bg-primary-700/70
-                              md:odd:border-r
-                            "
-                          >
-                            <span
-                              className="
-                                mt-0.5 flex h-7 min-w-9 items-center justify-center rounded-full
-                                bg-secondary-300 px-2 text-xs font-bold text-primary-900
-                              "
-                            >
-                              {fundacao.uf}
-                            </span>
+                  <List className="size-4" />
+                  Lista
+                </button>
 
-                            <div className="min-w-0 flex-1">
-                              <h6 className="line-clamp-1 text-sm font-semibold text-white md:text-base">
-                                {fundacao.nome}
-                              </h6>
-
-                              <p className="text-xs text-primary-100 md:text-sm">
-                                {fundacao.cidade} - {fundacao.uf}
-                              </p>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-
-                <div className="mt-auto flex flex-col gap-3 border-t border-primary-500/20 pt-5 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="max-w-md text-sm text-primary-100">
-                    Consulte a relação completa de fundações associadas ao CONFIES.
-                  </p>
-
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="inline-flex w-full items-center justify-center gap-2 sm:w-auto"
-                  >
-                    Ver todas as fundações
-                    <ArrowRight className="size-4" />
-                  </Button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("grid")}
+                  className={`
+                    inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition
+                    ${
+                      viewMode === "grid"
+                        ? "bg-primary-700 text-white"
+                        : "text-gray-600 hover:bg-white hover:text-primary-800"
+                    }
+                  `}
+                >
+                  <LayoutGrid className="size-4" />
+                  Grid
+                </button>
               </div>
             </div>
           </div>
         </div>
+
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <span className="eyebrow text-primary-700">
+              {regiaoAtiva === "brasil" ? "Todas as regiões" : `Região ${regiaoAtualLabel}`}
+            </span>
+
+            <h4 className="mt-1 text-2xl font-semibold text-gray-950">
+              {regiaoAtiva === "brasil"
+                ? "Todas as fundações associadas"
+                : `Fundações da região ${regiaoAtualLabel}`}
+            </h4>
+          </div>
+
+          <span className="hidden text-sm text-gray-500 md:block">
+            Visualização em {viewMode === "lista" ? "lista" : "grid"}
+          </span>
+        </div>
+
+        {fundacoesFiltradas.length === 0 ? (
+          <div className="rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm">
+            <p className="text-gray-600">
+              Nenhuma fundação encontrada com os filtros selecionados.
+            </p>
+          </div>
+        ) : viewMode === "lista" ? (
+          <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <div
+              className="
+                hidden grid-cols-[1.4fr_0.55fr_0.7fr_0.45fr] border-b border-gray-200
+                bg-gray-50 px-5 py-3 text-xs font-bold uppercase tracking-[0.14em]
+                text-gray-500 md:grid
+              "
+            >
+              <span>Fundação</span>
+              <span>Região</span>
+              <span>Localização</span>
+              <span>UF</span>
+            </div>
+
+            <ul className="divide-y divide-gray-100">
+              {fundacoesFiltradas.map((fundacao) => (
+                <li
+                  key={fundacao.id}
+                  className="
+                    grid grid-cols-1 gap-2 px-4 py-3 transition
+                    hover:bg-white md:grid-cols-[1.4fr_0.55fr_0.7fr_0.45fr]
+                    md:items-center md:px-5 md:py-2.5
+                  "
+                >
+                  <div className="min-w-0">
+                    <h5 className="line-clamp-1 text-sm font-semibold text-gray-900 md:text-[0.95rem]">
+                      {fundacao.nome}
+                    </h5>
+
+                    {fundacao.sigla && (
+                      <p className="mt-0.5 text-xs text-gray-500">
+                        {fundacao.sigla}
+                      </p>
+                    )}
+                  </div>
+
+                  <span className="w-fit rounded-full bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-800">
+                    {labelRegiao[fundacao.regiao]}
+                  </span>
+
+                  <p className="text-sm text-gray-600">
+                    {fundacao.cidade} - {fundacao.uf}
+                  </p>
+
+                  <span className="hidden text-sm font-semibold text-gray-700 md:block">
+                    {fundacao.uf}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {fundacoesFiltradas.map((fundacao) => (
+              <article
+                key={fundacao.id}
+                className="
+                  flex min-h-32 flex-col justify-between rounded-2xl
+                  border border-gray-200 bg-gray-50 p-5
+                  transition hover:-translate-y-1 hover:bg-white hover:shadow-md
+                "
+              >
+                <div className="flex items-start gap-3">
+                  <span
+                    className="
+                      flex size-10 shrink-0 items-center justify-center rounded-full
+                      bg-primary-700 text-sm font-bold text-white
+                    "
+                  >
+                    {fundacao.uf}
+                  </span>
+
+                  <div className="min-w-0">
+                    <h5 className="text-base font-semibold leading-snug text-gray-950">
+                      {fundacao.nome}
+                    </h5>
+
+                    {fundacao.sigla && (
+                      <p className="mt-1 text-sm text-gray-500">
+                        {fundacao.sigla}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-5 flex items-center justify-between gap-3 text-sm text-gray-600">
+                  <span className="inline-flex items-center gap-2">
+                    <Building2 className="size-4 text-primary-700" />
+                    {fundacao.cidade} - {fundacao.uf}
+                  </span>
+
+                  <span className="rounded-full bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-800">
+                    {labelRegiao[fundacao.regiao]}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
 }
 
-export default SectionFundacoes
+export default SectionTodasFundacoes

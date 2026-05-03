@@ -13,10 +13,10 @@ const Fundacoes = () => {
         eyebrow="Sobre as fundações"
         backgroundImage="/images/hero-fundacoes.png"
         />
-        <FAQ />
 
         <SectionFundacoes />
         <SectionAtuacao />
+        <FAQ />
         <AssociadasLogos />
     </section>
   )
